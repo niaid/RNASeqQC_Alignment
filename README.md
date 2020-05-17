@@ -1,6 +1,6 @@
 # RNASeq QC and Alignment
-Introductory practical training
-The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
+* Introductory practical training
+* The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 
 ---
 
@@ -12,19 +12,20 @@ The material shown below has been adapted from open access resources listed in t
 
 ## Setting up to run the RNA-seq workflow
 
-To get started with this lesson, we will start an interactive session and ask for 6 cores, by adding `-n 3` to the bsub command:
+To get started with this lesson, we will start an interactive session and ask for 6 cores, by adding `pe threaded 6` to the qsub command:
 
 ```bash
-$ qrsh -pe threaded 8	
+$ ssh ai-submit1.niaid.nih.gov
+$ qrsh -pe threaded 6	
 ```
 
-Change directories into the `unix_lesson` directory and copy the `reference_data` folder into your project directory:
+Copy the `rnaseq_lesson1` directory to your working directory:
 
 ```bash
-$ cd ~/unix_lesson/rnaseq
+$ cp -r /hpcdata/scratch/rnaseq_lesson1 .
 ```
 
-You should have a directory tree setup similar to that shown below. It is best practice to have all files you intend on using for your workflow present within the same directory.
+Once you copy the directly, verify that you have a directory tree setup similar to that shown below. It is best practice to have all files you intend on using for your workflow present within the same directory.
 
 ```
 rnaseq/

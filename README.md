@@ -51,7 +51,9 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 So let's get started by loading up some of the modules for tools we need for this section to perform alignment and assess the alignment: 
 
 ```bash
- $ module load seq/STAR/2.5.3a seq/samtools/1.3
+ $ module load module load STAR/2.7.3a-goolf-1.7.20 
+ $ module load module load samtools
+ $ module load 
 ```
 Create an output directory for our alignment files:
 
@@ -79,7 +81,8 @@ If you need to perform trimming on your fastq data to remove unwanted sequences/
 Example of cutadapt usage:
 
 ```bash
-$ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz 
+$ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz 
+$ cutadapt --front=CTCAAATTTATT --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1_trimmed.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz
 ```
 
 After trimming, cutadapt can remove any reads that are too short to ensure that you do not get spurious mapping of very short sequences to multiple locations on the genome. In addition to adapter trimming, cutadapt can trim off any low-quality bases too, but **please note that quality-based trimming is not considered best practice, since majority of the newer, recommended alignment tools can account for this.**
@@ -367,6 +370,7 @@ Now that we have done this for one sample, let's try using the same commands to 
 
 ***
 1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/) 
+2. https://www.epigenesys.eu/images/stories/protocols/pdf/20150303161357_p67.pdf
 
 ***
 *This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*

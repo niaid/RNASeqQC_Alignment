@@ -39,7 +39,7 @@ rnaseq/
 
 Below is a general overview of the steps involved in RNA-seq analysis.
 
-<img src="../img/RNAseqWorkflow.png" width="400">
+<img src="https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/RNAseqWorkflow.png" width="400">
 
 
 So let's get started by loading up some of the modules for tools we need for this section to perform alignment and assess the alignment: 

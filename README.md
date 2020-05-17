@@ -1,17 +1,12 @@
-# RNASeqQC_Alignment
+# RNASeq QC and Alignment
 Introductory practical training
+The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 
 ---
-title: "RNA-Seq workflow"
-author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman"
-date: "Tuesday, August 22, 2017"
----
-
-Approximate time: 90 minutes
 
 ## Learning Objectives:
 
-* Describe and implement the RNA-seq workflow to align reads to the reference genome 
+* Describe and implement the RNA-seq workflow from the pre-processing step to the alignment of reads to the reference genome 
 * Describe tools and methods within the RNA-seq workflow
 * Assessing input and output filetypes
 
@@ -59,6 +54,31 @@ Create an output directory for our alignment files:
 $ mkdir results/STAR
 ```
 In the automation script, we will eventually loop over all of our files and have the cluster work on the files in parallel. For now, we're going to work on just one to test and set up our workflow. To start we will use the first replicate in the Mov10 overexpression group, `Mov10_oe_1_subset.fq`.
+
+## Read Trimming
+## Quality Control (*Optional*) - Trimming 
+
+We want to make sure that as many reads as possible map or align accurately to the genome. To ensure accuracy, only a small number of mismatches between the read sequence and the genome sequence are allowed, and any read with more than a few mismatches will be marked as being unaligned. 
+
+Therefore, to make sure that all the reads in the dataset have a chance to map/align to the genome, unwanted information can be trimmed off from every read, one read at a time. The types of unwanted information can include one or more of the following:
+- leftover adapter sequences
+- known contaminants (strings of As/Ts, other sequences)
+- poor quality bases at read ends
+
+**We will not be performing this step** because:
+* our data does not have an appreciable amount of leftover adapter sequences or other contaminating sequences based on FastQC.
+* the alignment tool we have picked (STAR) is able to account for low-quality bases at the ends of reads when matching them to the genome.
+
+If you need to perform trimming on your fastq data to remove unwanted sequences/bases, the recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html). 
+
+Example of cutadapt usage:
+
+```bash
+$ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz 
+```
+
+After trimming, cutadapt can remove any reads that are too short to ensure that you do not get spurious mapping of very short sequences to multiple locations on the genome. In addition to adapter trimming, cutadapt can trim off any low-quality bases too, but **please note that quality-based trimming is not considered best practice, since majority of the newer, recommended alignment tools can account for this.**
+
 
 ## Read Alignment
 The alignment process consists of choosing an appropriate reference genome to map our reads against, and performing the read alignment using one of several splice-aware alignment tools such as [STAR](https://github.com/alexdobin/STAR) or [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) (HISAT2 is a successor to both HISAT and TopHat2). The choice of aligner is a personal preference and also dependent on the computational resources that are available to you.
@@ -339,8 +359,11 @@ Now that we have done this for one sample, let's try using the same commands to 
 1. How does the MOV10 gene look in the control sample in comparison to the overexpression sample?
 2. Take a look at a few other genes by typing into the search bar. For example, PPM1J and PTPN22. How do these genes compare? 
 
-***
 
+***
+1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/) 
+
+***
 *This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
 
 * *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 

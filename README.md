@@ -15,7 +15,7 @@ The material shown below has been adapted from open access resources listed in t
 To get started with this lesson, we will start an interactive session and ask for 6 cores, by adding `-n 3` to the bsub command:
 
 ```bash
-$ bsub -Is -n 3 -q interactive bash	
+$ qrsh -pe threaded 8	
 ```
 
 Change directories into the `unix_lesson` directory and copy the `reference_data` folder into your project directory:

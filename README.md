@@ -33,10 +33,8 @@ rnaseq/
 	├── reference_data/
 	   └── chr1.fa
 	   └── chr1-hg19_genes.gtf
-	├── meta/
 	├── results/
 	├── scripts/
-	└── logs/
 ```
 
 Below is a general overview of the steps involved in RNA-seq analysis.

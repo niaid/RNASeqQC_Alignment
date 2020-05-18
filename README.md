@@ -1,4 +1,4 @@
-# RNASeq QC and Alignment  (DO NOT USE YET, IT IS IN DEVELOPMENT TODAY - May 17, 2020)
+# RNASeq QC and Alignment  (DO NOT USE YET, IT IS IN DEVELOPMENT TODAY - May 18, 2020)
 * Introductory practical training
 * The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 
@@ -235,9 +235,10 @@ STAR --genomeDir reference_data/chr22index \
 	3. How many reads are unmapped due to read length?
 ***
 
-## Please know that on a real analysis, you should align all samples.  Merge technical replicates as appropriate.  Use a loop. 
+### Please know that on a real analysis, you should align all samples.  Merge technical replicates as appropriate.  Use a loop. 
 
 ```bash
+*** DO NOT RUN, Instead use the output provided to continue to the next step ***
 cd raw_data
 for i in *-chr22.read1.trimmed.fastq.gz;
 	do
@@ -269,6 +270,11 @@ Let's take a quick look at our alignment. To do so we first convert our BAM file
 $ samtools view -h results/HBR_Rep1Aligned.sortedByCoord.out.bam | less
 ```
 Scroll through the SAM file and see how the fields correspond to what we expected.
+
+
+### Merge alignment 
+
+
 
 
 ### Visual assessment of the alignment

@@ -89,7 +89,7 @@ If you need to perform trimming on your fastq data to remove unwanted sequences/
 * For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ cat *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
 
 ```bash
-$ file="inputfastqID.txt"
+file="inputfastqID.txt"
 while read line
     do
     cat $line | cutadapt -u 10 --minimum-length=25 -o ${line}.read1.trimmed.fastq.gz -p ${line}.read2.trimmed.fastq.gz ${line}.read1.fastq.gz ${line}.read2.fastq.gz

@@ -86,7 +86,7 @@ Therefore, to make sure that all the reads in the dataset have a chance to map/a
 
 If you need to perform trimming on your fastq data to remove unwanted sequences/bases, a recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html) but Btrim and Trimmomatic are also very good and fast.   A typical use of cutadapt is to remove adapter using a command line such as:  > $ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz  
 
-* For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ cat *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
+* For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ ls *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
 
 ```bash
 file="inputfastqID.txt"

@@ -268,19 +268,19 @@ STAR --genomeDir reference_data/chr22index \
 ```bash
 *** DO NOT RUN, Instead use the output provided to continue to the next step ***
 cd raw_data
-for i in *-chr22.read1.trimmed.fastq.gz;
-	do
-	STAR \
-	--outSAMtype BAM SortedByCoordinate \
-	--genomeDir ../reference_data/chr22index \
-	--readFilesCommand zcat $i ${i%-chr22.read1.trimmed.fastq.gz}-chr22.read2.trimmed.fastq.gz \
-	--runThreadN 6 \
-	--outSAMunmapped Within \
-	--outSAMattributes Standard \
-	--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz_}
-done
+file="inputIDs.txt"
+while read line
+    do
+    STAR \
+    --outSAMtype BAM SortedByCoordinate \
+    --genomeDir ../reference_data/chr22index \
+    --readFilesIn trimmedreads/${line}.read1.trimmed.fastq trimmedreads/${line}.read2.trimmed.fastq \
+    --runThreadN 6 \
+    --outSAMunmapped Within \
+    --outSAMattributes Standard \
+    --outFileNamePrefix ../results/${line}_aligned_
+done <"$file"
 ```
-
 
 ### Alignment Outputs (SAM/BAM)
 

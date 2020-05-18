@@ -25,6 +25,7 @@ Copy the `rnaseq_lesson1` directory to your working directory:
 ```bash
 $ cd /hpcdata/{group}/{workingdir} 
 $ cp -r /hpcdata/scratch/rnaseq_lesson1 .
+$ cd rnaseq_lesson1
 ```
 
 Once you copy the directly, verify that you have a directory tree setup similar to that shown below. It is best practice to have all files you intend on using for your workflow present within the same directory.
@@ -32,16 +33,16 @@ Once you copy the directly, verify that you have a directory tree setup similar 
 ```
 rnaseq_lesson1/
 	├── raw_data/
-	   └── UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
-	   └── inputfastqID.txt
+	   └── UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq
+	   └── inputIDs.txt
 	├── reference_data/
-	   └── chr1.fa
-	   └── chr1-hg19_genes.gtf
+	   └── chr22.fa
+	   └── genes.gtf
 	   └── chr22index/
 	├── results/
 	├── scripts/
@@ -55,20 +56,19 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 So let's get started by loading up some of the modules for tools we need for this section to perform QC, trim, align and inspect the alignment: 
 
 ```bash
- $ module load module load STAR/2.7.3a-goolf-1.7.20 
- $ module load module load samtools
+ $ module load STAR/2.7.3a-goolf-1.7.20 
+ $ module load samtools
  $ module load fastqc/0.11.8-Java-1.8.0_45
  $ module load multiqc/1.7-Python-3.5.5
- $ module laod cutadapt
+ $ module load cutadapt/2.3-foss-2016b-Python-3.7.3
 ```
 
 Let's  quickly inspect quality of input files using FastQC as learned in previous session
 ```bash
-$ cd rnaseq_lesson1
-$ fastqc *fastq.gz
+$ cd raw_data
+$ fastqc *fastq
 $ multiqc .
 ```
-
 
 ## Read Trimming
 ## Quality Control (*Optional*) - Trimming 
@@ -90,10 +90,12 @@ If you need to perform trimming on your fastq data to remove unwanted sequences/
 * For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ ls *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
 
 ```bash
-file="inputfastqID.txt"
+mkdir trimmedreads
+
+file="inputIDs.txt"
 while read line
     do
-    cat $line | cutadapt -u 10 --minimum-length=25 -o ${line}.read1.trimmed.fastq.gz -p ${line}.read2.trimmed.fastq.gz ${line}.read1.fastq.gz ${line}.read2.fastq.gz
+    cat $line | cutadapt -u 10 -U 10 --minimum-length=25 -o trimmedreads/${line}.read1.trimmed.fastq -p trimmedreads/${line}.read2.trimmed.fastq ${line}_Build37-ErccTranscripts-chr22.read1.fastq ${line}_Build37-ErccTranscripts-chr22.read2.fastq
     echo "$line"
 done <"$file"
 ```
@@ -104,7 +106,8 @@ After trimming, cutadapt can remove any reads that are too short to ensure that 
 In order to verify that cutadapt did a good job trimming, rerun **fastqc** and **multiqc**
 
 ```bash
-fastqc *trimmed.fastq.gz
+cd trimmedreads
+fastqc *trimmed.fastq
 multiqc -f .
 ```
 
@@ -182,6 +185,7 @@ The basic options to **generate genome indices** using STAR are as follows:
 * `--sjdbOverhang`: readlength -1
 
 ```bash
+cd ../../. # you should now be in the directory `rnaseq_lesson1`
 STAR --runThreadN 6 \
 --runMode genomeGenerate \
 --genomeDir reference_data/chr22index \

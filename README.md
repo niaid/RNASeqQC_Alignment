@@ -167,9 +167,9 @@ $ ls -l /hpcdata/bio_data/iGenomes/
 
 #### Creating a genome index
 
-For this training we are using reads that originate from chr22 therefore we will create a genome index using only the fasta file for chr22 (copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/chr22.fa) and the annotations file copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf
+For this training we are using reads that originate from chr22 therefore we will only need a genome index for chr22.  Even though it is a small chromosome, the step to generate the index can take long therefore we are providing the index files in the directory chr22_index found in the directory **reference_data**
 
-For this workshop, we will create the index genome for this small chromosome hoping it won't take long but for a real whole genome analysis, you should make sure to use an existing index for the entire genome or create your own which will take a while.  For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested for a more accurate alignment of the reads. 
+Please remember that for a regular analysis, you should make sure to use an existing index for the entire genome or create your own, which will take a while.  For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested for a more accurate alignment of the reads. For our exercise, the FASTA was copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/chr22.fa) and the annotations file copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf
 
 The basic options to **generate genome indices** using STAR are as follows:
 
@@ -210,24 +210,17 @@ Now let's put it all together! The full STAR alignment command is provided below
 
 > If you like you can copy-paste it directly into your terminal. Alternatively, you can manually enter the command, but it is advisable to first type out the full command in a text editor (i.e. [Sublime Text](http://www.sublimetext.com/) or [Notepad++](https://notepad-plus-plus.org/)) on your local machine and then copy paste into the terminal. This will make it easier to catch typos and make appropriate changes. 
 
-```bash
-$ STAR --runThreadN 6 \
---genomeDir /groups/hbctraining/intro_rnaseq_hpc/reference_STAR \
---readFilesIn raw_data/Mov10_oe_1.subset.fq \
---outFileNamePrefix results/STAR/Mov10_oe_1_ \
---outSAMtype BAM SortedByCoordinate \
---outSAMunmapped Within \
---outSAMattributes NH HI NM MD AS
-```
+## Let's align trimmed reads to the indexed genome (chr22)
 
-STAR --genomeDir reference_data/chr22index \
+``bash
+STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
 --runThreadN 6 \
 --readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz \
 --outFileNamePrefix results/HBR_Rep1 \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
 --outSAMattributes Standard 
-
+```
 
 ***
 

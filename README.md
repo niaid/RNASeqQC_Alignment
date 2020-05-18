@@ -42,6 +42,7 @@ rnaseq_lesson1/
 	├── reference_data/
 	   └── chr1.fa
 	   └── chr1-hg19_genes.gtf
+	   └── chr22index/
 	├── results/
 	├── scripts/
 ```
@@ -167,9 +168,9 @@ $ ls -l /hpcdata/bio_data/iGenomes/
 
 #### Creating a genome index
 
-For this training we are using reads that originate from chr22 therefore we will only need a genome index for chr22.  Even though it is a small chromosome, the step to generate the index can take long therefore we are providing the index files in the directory chr22_index found in the directory **reference_data**
+* For this training we are using reads that originate from chr22 therefore we will only need a genome index for chr22.  Since it is a small chromosome, the step to generate the index should only take a couple of minutes. 
 
-Please remember that for a regular analysis, you should make sure to use an existing index for the entire genome or create your own, which will take a while.  For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested for a more accurate alignment of the reads. For our exercise, the FASTA was copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/chr22.fa) and the annotations file copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf
+* Please remember that for a regular analysis, you should make sure to use an existing index for the entire genome or create your own, which will take a while.  For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested for a more accurate alignment of the reads. For our exercise, the FASTA was copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/chr22.fa) and the annotations file copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf
 
 The basic options to **generate genome indices** using STAR are as follows:
 
@@ -184,10 +185,11 @@ The basic options to **generate genome indices** using STAR are as follows:
 ** DO NOT RUN**
 STAR --runThreadN 6 \
 --runMode genomeGenerate \
---genomeDir chr22index \
+--genomeDir reference_data/chr22index \
 --genomeFastaFiles reference_data/chr22.fa \
 --sjdbGTFfile reference_data/genes.gtf \
---sjdbOverhang 89
+--sjdbOverhang 89 \
+--genomeSAindexNbases 11
 ```
 
 The basic options for **mapping reads** to the genome using STAR are as follows:
@@ -213,7 +215,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 ## Let's align one pair of trimmed reads to the indexed genome (chr22)
 
 ```bash
-STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
+STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
 --readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz \
 --outFileNamePrefix results/HBR_Rep1 \
@@ -246,7 +248,7 @@ for i in *-chr22.read1.trimmed.fastq.gz;
 		--runThreadN 6 \
 		--outSAMunmapped Within \
 		--outSAMattributes Standard \
-		--outFileNamePrefix ../results/${i%-chr22.read1.fastq.gz}
+		--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz}
 	done
 ```
 

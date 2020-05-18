@@ -224,7 +224,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 * How many reads are there in the first library? Decompress file on the fly with 'zcat', pipe into 'grep', search for the read name prefix and pipe into 'wc' to do a word count ('-l' gives lines)
 
 ```bash
-zcat aw_data/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz | grep -P "^\@HWI" | wc -l
+zcat raw_data/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz | grep -P "^\@HWI" | wc -l
 ```
 
 * Align one pair to chr22 index
@@ -297,7 +297,7 @@ Scroll through the SAM file and see how the fields correspond to what we expecte
 
 
 ### Merge alignment 
-
+picard
 
 
 
@@ -330,12 +330,30 @@ smb://locusfileserver.niaid.nih.gov/group/directory/
 * Load the .bam file using the **"Load from File..."** option under the **"File"** pull-down menu. *IGV requires the `.bai` file to be in the same location as corresponding `.bam` file that you want to load into IGV, but there is no other direct use for this index file.*
 
 ***
-**Exercise**
+**Optional Exercise for obataining counts from the alignment files**
+```bash
+module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 
-Now that we have done this for one sample, let's try using the same commands to perform alignment on one of the control samples. Create an index for the `Irrel_kd_1_Aligned.sortedByCoord.out.bam` file and them to your laptop and load into IGV for visualization. 
+cd results
+mkdir htseq_counts
+cd htseq_counts
 
-1. How does the MOV10 gene look in the control sample in comparison to the overexpression sample?
-2. Take a look at a few other genes by typing into the search bar. For example, PPM1J and PTPN22. How do these genes compare? 
+# rename files
+cp HBR_Rep1*bam HBR_Rep1.bam
+cp HBR_Rep2*bam HBR_Rep2.bam
+cp HBR_Rep3*bam HBR_Rep3.bam
+cp UHR_Rep1*bam UHR_Rep1.bam
+cp UHR_Rep2*bam UHR_Rep2.bam
+cp UHR_Rep3*bam UHR_Rep3.bam
+
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep1.bam $RNA_REF_GTF > UHR_Rep1_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/UHR_Rep2.bam $RNA_REF_GTF > UHR_Rep2_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/UHR_Rep3.bam $RNA_REF_GTF > UHR_Rep3_gene.tsv
+
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep1.bam $RNA_REF_GTF > HBR_Rep1_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep2.bam $RNA_REF_GTF > HBR_Rep2_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep3.bam $RNA_REF_GTF > HBR_Rep3_gene.tsv
+```
 
 
 ***
@@ -350,6 +368,7 @@ Now that we have done this for one sample, let's try using the same commands to 
 9. Harvard Chan Bioinformatics Core - https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lectures/rna-seq_design.pdf
 10. Differential expression - https://github.com/griffithlab/rnaseq_tutorial/wiki/Expression
 11. QC after alignment - http://rseqc.sourceforge.net/ and example: https://github.com/griffithlab/rnaseq_tutorial/wiki/PostAlignment-QC
+12. HTSEq https://htseq.readthedocs.io/en/release_0.9.1/count.html
 
 
 ***

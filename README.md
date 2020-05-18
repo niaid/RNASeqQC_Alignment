@@ -123,19 +123,19 @@ STAR is shown to have **high accuracy** and outperforms other aligners by more t
 
 For every read that STAR aligns, STAR will search for the longest sequence that exactly matches the reference genome:
 
-![STAR_step1](../img/alignment_STAR_step1.png)
+![STAR_step1](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/img/alignment_STAR_step1.png)
 	
 The different parts of the read that are mapped separately are called 'seeds'. So the first MMP that is mapped to the genome is called *seed1*.
 
 STAR will then search again for only the unmapped portion of the read to find the next longest sequence that exactly matches the reference genome, which will be *seed2*. 
 
-![STAR_step2](../img/alignment_STAR_step2.png)
+![STAR_step2](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/img/alignment_STAR_step2.png)
 
 This sequential searching of only the unmapped portions of reads underlies the efficiency of the STAR algorithm. STAR uses an uncompressed suffix array (SA) to efficiently search for the longest matching portions of the read, this allows for quick searching against even the largest reference genomes. Other slower aligners use algorithms that often search for the entire read sequence before splitting reads and performing iterative rounds of mapping. More details on the algorithm itself can be found in the [STAR publication](http://bioinformatics.oxfordjournals.org/content/early/2012/10/25/bioinformatics.bts635). 
 
 **If STAR does not find an exact matching sequence** for each part of the read due to mismatches or indels, the seed will be extended.
 
-![STAR_step3](../img/alignment_STAR_step3.png)
+![STAR_step3](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/img/alignment_STAR_step3.png)
 
 **If extension does not give a good alignment**, then the poor quality or adapter sequence (or other contaminating sequence) will be soft clipped.
 

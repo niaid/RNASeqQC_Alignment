@@ -103,14 +103,14 @@ After trimming, cutadapt can remove any reads that are too short to ensure that 
 In order to verify that cutadapt did a good job trimming, rerun **fastqc** and **multiqc**
 
 ```bash
-fastqc *trimming.gz
+fastqc *trimmed.fastq.gz
 muitiqc -f .
 ```
 
 ## Read Alignment
 The alignment process consists of choosing an appropriate reference genome to map our reads against, and performing the read alignment using one of several splice-aware alignment tools such as [STAR](https://github.com/alexdobin/STAR) or [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) (HISAT2 is a successor to both HISAT and TopHat2). The choice of aligner is a personal preference and also dependent on the computational resources that are available to you.
  
-For this workshop we will be using STAR (Spliced Transcripts Alignment to a Reference), an aligner designed to specifically address many of the challenges of RNAseq read mapping. STAR is shown to have **high accuracy** and outperforms other aligners by more than a **factor of 50 in mapping speed (but also requires quite a bit of memory**). 
+For this workshop we will be using STAR (Spliced Transcripts Alignment to a Reference), an aligner designed to specifically address many of the challenges of RNAseq read mapping. 
 
 ### STAR Alignment Strategy
 

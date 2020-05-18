@@ -210,12 +210,12 @@ Now let's put it all together! The full STAR alignment command is provided below
 
 > If you like you can copy-paste it directly into your terminal. Alternatively, you can manually enter the command, but it is advisable to first type out the full command in a text editor (i.e. [Sublime Text](http://www.sublimetext.com/) or [Notepad++](https://notepad-plus-plus.org/)) on your local machine and then copy paste into the terminal. This will make it easier to catch typos and make appropriate changes. 
 
-## Let's align trimmed reads to the indexed genome (chr22)
+## Let's align one pair of trimmed reads to the indexed genome (chr22)
 
 ```bash
 STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
 --runThreadN 6 \
---readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz \
+--readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz \
 --outFileNamePrefix results/HBR_Rep1 \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
@@ -233,15 +233,36 @@ STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
 	3. How many reads are unmapped due to read length?
 ***
 
+## Please know that on a real analysis, you should align all samples.  Merge technical replicates as appropriate.  Use a loop. 
+
+```bash
+cd raw_data
+for i in *-chr22.read1.trimmed.fastq.gz;
+	do
+		STAR --runMode alignReads \
+		--outSAMtype BAM SortedByCoordinate \
+		--genomeDir ../reference_data/chr22index \
+		--readFilesCommand zcat $i ${i%-chr22.read1.trimmed.fastq.gz}-chr22.read2.trimmed.fastq.gz \
+		--runThreadN 6 \
+		--outSAMunmapped Within \
+		--outSAMattributes Standard \
+		--outFileNamePrefix ../results/${i%-chr22.read1.fastq.gz}
+	done
+```
+
+
+
+
+
 ### Alignment Outputs (SAM/BAM)
 
 The output we requested from STAR is a BAM file, and by default returns a file in SAM format. **BAM is a binary version of the SAM file, also known as Sequence Alignment Map format.** The SAM file is a tab-delimited text file that contains information for each individual read and its alignment to the genome. The file begins with an optional header (which starts with '@'), followed by an alignment section in which each line corresponds to alignment information for a single read. **Each alignment line has 11 mandatory fields** for essential mapping information and a variable number of fields for aligner specific information.
 
 These fields are described briefly below, but for more detailed information the paper by [Heng Li et al](http://bioinformatics.oxfordjournals.org/content/25/16/2078.full) is a good start.
 
-![SAM](../img/sam_bam.png)
+![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam.png)
 
-![SAM](../img/sam_bam3.png)
+![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam3.png)
 
 Let's take a quick look at our alignment. To do so we first convert our BAM file into SAM format using samtools and then pipe it to the `less` command. This allows us to look at the contents without having to write it to file (since we don't need a SAM file for downstream analyses).
 

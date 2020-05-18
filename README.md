@@ -329,6 +329,9 @@ smb://locusfileserver.niaid.nih.gov/group/directory/
 **Note**: there is also an option to "Load Genomes from File..." under the "Genomes" pull-down menu - this is useful when working with non-model organisms.  Select chr22.
 * Load the .bam file using the **"Load from File..."** option under the **"File"** pull-down menu. *IGV requires the `.bai` file to be in the same location as corresponding `.bam` file that you want to load into IGV, but there is no other direct use for this index file.*
 
+* Look for the following genes: EIF3L, NDUFA6, and RBX1
+* Also, noticed that SULT4A1 and GTSE1 are differentially expressed. Are they up-regulated or down-regulated in the brain (HBR) compared to cancer cell lines (UHR)?
+
 ***
 **Optional Exercise for obataining counts from the alignment files**
 ```bash

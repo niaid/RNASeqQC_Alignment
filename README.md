@@ -241,19 +241,16 @@ STAR --genomeDir reference_data/chr22index \
 cd raw_data
 for i in *-chr22.read1.trimmed.fastq.gz;
 	do
-		STAR --runMode alignReads \
-		--outSAMtype BAM SortedByCoordinate \
-		--genomeDir ../reference_data/chr22index \
-		--readFilesCommand zcat $i ${i%-chr22.read1.trimmed.fastq.gz}-chr22.read2.trimmed.fastq.gz \
-		--runThreadN 6 \
-		--outSAMunmapped Within \
-		--outSAMattributes Standard \
-		--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz}
-	done
+	STAR \
+	--outSAMtype BAM SortedByCoordinate \
+	--genomeDir ../reference_data/chr22index \
+	--readFilesCommand zcat $i ${i%-chr22.read1.trimmed.fastq.gz}-chr22.read2.trimmed.fastq.gz \
+	--runThreadN 6 \
+	--outSAMunmapped Within \
+	--outSAMattributes Standard \
+	--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz}
+done
 ```
-
-
-
 
 
 ### Alignment Outputs (SAM/BAM)
@@ -269,7 +266,7 @@ These fields are described briefly below, but for more detailed information the 
 Let's take a quick look at our alignment. To do so we first convert our BAM file into SAM format using samtools and then pipe it to the `less` command. This allows us to look at the contents without having to write it to file (since we don't need a SAM file for downstream analyses).
 
 ```bash
-$ samtools view -h results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam | less
+$ samtools view -h results/HBR_Rep1Aligned.sortedByCoord.out.bam | less
 ```
 Scroll through the SAM file and see how the fields correspond to what we expected.
 
@@ -279,14 +276,11 @@ Scroll through the SAM file and see how the fields correspond to what we expecte
 Index the BAM file for visualization with IGV:
 
 ```bash
-$ samtools index results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam
+$ samtools index results/HBR_Rep1Aligned.sortedByCoord.out.bam
 ```
 
-Use _**FileZilla**_ to copy the following files to your local machine:
- 
-`~/unix_lesson/results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam`
-
-`~/unix_lesson/results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam.bai` 
+Use _**locus mounted drive** to upload files to IGV:
+smb://locusfileserver.niaid.nih.gov/group/directory/
 
 > **NOTE: You can also transfer files to your laptop using the command line**
 >
@@ -295,17 +289,15 @@ Use _**FileZilla**_ to copy the following files to your local machine:
 > First, identify the location of the _origin file_ you intend to copy, followed by the _destination_ of that file. Since the original file is located on Orchestra, this requires you to provide remote host and login information.
 
 > ```bash
-> $ scp user_name@transfer.orchestra.med.harvard.edu:/home/user_name/unix_lesson/rnaseq/results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam* /path/to/directory_on_laptop
+> $ scp user_name@ai-submit1.niaid.nih.gov:/hpcdata/group/directory/rnaseq_lesson1/results/*.bam /path/to/directory_on_laptop
 > ```
 
 **Visualize**
 
 * Start [IGV](https://www.broadinstitute.org/software/igv/download), *you should have this previously installed on your laptop*.
 * Load the Human genome (hg19) into IGV using the dropdown menu at the top left of your screen. 
-**Note**: there is also an option to "Load Genomes from File..." under the "Genomes" pull-down menu - this is useful when working with non-model organisms
+**Note**: there is also an option to "Load Genomes from File..." under the "Genomes" pull-down menu - this is useful when working with non-model organisms.  Select chr22.
 * Load the .bam file using the **"Load from File..."** option under the **"File"** pull-down menu. *IGV requires the `.bai` file to be in the same location as corresponding `.bam` file that you want to load into IGV, but there is no other direct use for this index file.*
-
-![IGV screenshot](../img/igv_screenshot.png)
 
 ***
 **Exercise**
@@ -319,6 +311,14 @@ Now that we have done this for one sample, let's try using the same commands to 
 ***
 1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/) 
 2. https://www.epigenesys.eu/images/stories/protocols/pdf/20150303161357_p67.pdf
+3. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4631051/
+4. Follow https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data
+5. Malachi Griffith*, Jason R. Walker, Nicholas C. Spies, Benjamin J. Ainscough, Obi L. Griffith*. 2015. Informatics for RNA-seq: A web resource for analysis on the cloud. PLoS Comp Biol. 11(8):e1004393
+6. https://rnabio.org/
+7. STAR alignment https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html
+8. STAR MANUAL https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
+9. Harvard Chan Bioinformatics Core - https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lectures/rna-seq_design.pdf
+
 
 ***
 *This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*

@@ -51,7 +51,7 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 <img src="https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/RNAseqWorkflow.png" width="400">
 
 
-So let's get started by loading up some of the modules for tools we need for this section to perform alignment and assess the alignment: 
+So let's get started by loading up some of the modules for tools we need for this section to perform QC, trim, align and inspect the alignment: 
 
 ```bash
  $ module load module load STAR/2.7.3a-goolf-1.7.20 
@@ -69,15 +69,6 @@ $ multiqc .
 ```
 
 
-
-
-Create an output directory for our alignment files:
-
-```bash
-$ mkdir results/STAR
-```
-
-
 ## Read Trimming
 ## Quality Control (*Optional*) - Trimming 
 
@@ -87,19 +78,23 @@ Therefore, to make sure that all the reads in the dataset have a chance to map/a
 - leftover adapter sequences
 - known contaminants (strings of As/Ts, other sequences)
 - poor quality bases at read ends
+- bases with bias at the 5' end of read
 
-**We will not be performing this step** because:
+**We will not be performing a trim by quality step** because:
 * our data does not have an appreciable amount of leftover adapter sequences or other contaminating sequences based on FastQC.
 * the alignment tool we have picked (STAR) is able to account for low-quality bases at the ends of reads when matching them to the genome.
 
-If you need to perform trimming on your fastq data to remove unwanted sequences/bases, the recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html). 
+If you need to perform trimming on your fastq data to remove unwanted sequences/bases, a recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html) but Btrim and Trimmomatic are also very good and fast.   A typical use of cutadapt is to remove adapter using a command line such as:  > $ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz  
 
-Example of cutadapt usage:
+* For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.
 
 ```bash
-$ cutadapt -u 10 --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz -p  HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
-
-
+$ file="inputfastqID.txt"
+while read line
+    do
+    cat $line | cutadapt -u 10 --minimum-length=25 -o ${line}.read1.trimmed.fastq.gz -p ${line}.read2.trimmed.fastq.gz ${line}.read1.fastq.gz ${line}.read2.fastq.gz
+    echo "$line"
+done <"$file"
 ```
 
 After trimming, cutadapt can remove any reads that are too short to ensure that you do not get spurious mapping of very short sequences to multiple locations on the genome. In addition to adapter trimming, cutadapt can trim off any low-quality bases too, but **please note that quality-based trimming is not considered best practice, since majority of the newer, recommended alignment tools can account for this.**

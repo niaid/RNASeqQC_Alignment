@@ -182,7 +182,6 @@ The basic options to **generate genome indices** using STAR are as follows:
 * `--sjdbOverhang`: readlength -1
 
 ```bash
-** DO NOT RUN**
 STAR --runThreadN 6 \
 --runMode genomeGenerate \
 --genomeDir reference_data/chr22index \
@@ -213,8 +212,24 @@ Now let's put it all together! The full STAR alignment command is provided below
 > If you like you can copy-paste it directly into your terminal. Alternatively, you can manually enter the command, but it is advisable to first type out the full command in a text editor (i.e. [Sublime Text](http://www.sublimetext.com/) or [Notepad++](https://notepad-plus-plus.org/)) on your local machine and then copy paste into the terminal. This will make it easier to catch typos and make appropriate changes. 
 
 ## Let's align one pair of trimmed reads to the indexed genome (chr22)
+* ***Where do the input files come from?  
+* See additional details: https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data .  Paired-end 101-mers generated on an Illumina HiSeq instrument.  UHR (Universal Human Reference), HBR (Human Brain Reference).  These datasets are highlighted on the tutorial https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression
+* UHR + ERCC Spike-In Mix1, Replicate 1
+* UHR + ERCC Spike-In Mix1, Replicate 2
+* UHR + ERCC Spike-In Mix1, Replicate 3
+* HBR + ERCC Spike-In Mix2, Replicate 1
+* HBR + ERCC Spike-In Mix2, Replicate 2
+* HBR + ERCC Spike-In Mix2, Replicate 3
+
+* How many reads are there in the first library? Decompress file on the fly with 'zcat', pipe into 'grep', search for the read name prefix and pipe into 'wc' to do a word count ('-l' gives lines)
 
 ```bash
+zcat aw_data/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz | grep -P "^\@HWI" | wc -l
+```
+
+* Align one pair to chr22 index
+```bash
+# do HBR_Rep1
 STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
 --readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz \
@@ -222,6 +237,15 @@ STAR --genomeDir reference_data/chr22index \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
 --outSAMattributes Standard 
+
+# or UHR_Rep3
+STAR --genomeDir reference_data/chr22index \
+--runThreadN 6 \
+--readFilesCommand zcat raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz \
+--outFileNamePrefix results/UHR_Rep3 \
+--outSAMtype BAM SortedByCoordinate \
+--outSAMunmapped Within \
+--outSAMattributes Standard
 ```
 
 ***
@@ -324,6 +348,8 @@ Now that we have done this for one sample, let's try using the same commands to 
 7. STAR alignment https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html
 8. STAR MANUAL https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 9. Harvard Chan Bioinformatics Core - https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lectures/rna-seq_design.pdf
+10. Differential expression - https://github.com/griffithlab/rnaseq_tutorial/wiki/Expression
+11. QC after alignment - http://rseqc.sourceforge.net/ and example: https://github.com/griffithlab/rnaseq_tutorial/wiki/PostAlignment-QC
 
 
 ***

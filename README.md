@@ -353,6 +353,12 @@ htseq-count --format bam --order pos --mode intersection-strict --stranded rever
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep1.bam ../reference_data/genes.gtf > HBR_Rep1_gene.tsv
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep2.bam ../reference_data/genes.gtf > HBR_Rep2_gene.tsv
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep3.bam ../reference_data/genes.gtf > HBR_Rep3_gene.tsv
+
+join UHR_Rep1_gene.tsv UHR_Rep2_gene.tsv | join - UHR_Rep3_gene.tsv | join - HBR_Rep1_gene.tsv | join - HBR_Rep2_gene.tsv | join - HBR_Rep3_gene.tsv > gene_read_counts_table_all.tsv
+echo "GeneID UHR_Rep1 UHR_Rep2 UHR_Rep3 HBR_Rep1 HBR_Rep2 HBR_Rep3" > header.txt
+cat header.txt gene_read_counts_table_all.tsv | grep -v "__" | perl -ne 'chomp $_; $_ =~ s/\s+/\t/g; print "$_\n"' > gene_read_counts_table_all_final.tsv
+rm -f gene_read_counts_table_all.tsv header.txt
+head gene_read_counts_table_all_final.tsv
 ```
 
 

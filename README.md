@@ -273,7 +273,7 @@ for i in *-chr22.read1.trimmed.fastq.gz;
 	--runThreadN 6 \
 	--outSAMunmapped Within \
 	--outSAMattributes Standard \
-	--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz}
+	--outFileNamePrefix ../results/${i%-chr22.read1.aln.fastq.gz_}
 done
 ```
 
@@ -346,13 +346,13 @@ cp UHR_Rep1*bam UHR_Rep1.bam
 cp UHR_Rep2*bam UHR_Rep2.bam
 cp UHR_Rep3*bam UHR_Rep3.bam
 
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep1.bam $RNA_REF_GTF > UHR_Rep1_gene.tsv
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/UHR_Rep2.bam $RNA_REF_GTF > UHR_Rep2_gene.tsv
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/UHR_Rep3.bam $RNA_REF_GTF > UHR_Rep3_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep1.bam ../reference_data/genes.gtf > UHR_Rep1_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep2.bam ../reference_data/genes.gtf > UHR_Rep2_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep3.bam ../reference_data/genes.gtf > UHR_Rep3_gene.tsv
 
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep1.bam $RNA_REF_GTF > HBR_Rep1_gene.tsv
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep2.bam $RNA_REF_GTF > HBR_Rep2_gene.tsv
-htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id $RNA_ALIGN_DIR/HBR_Rep3.bam $RNA_REF_GTF > HBR_Rep3_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep1.bam ../reference_data/genes.gtf > HBR_Rep1_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep2.bam ../reference_data/genes.gtf > HBR_Rep2_gene.tsv
+htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep3.bam ../reference_data/genes.gtf > HBR_Rep3_gene.tsv
 ```
 
 

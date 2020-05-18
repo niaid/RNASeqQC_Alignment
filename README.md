@@ -104,7 +104,7 @@ In order to verify that cutadapt did a good job trimming, rerun **fastqc** and *
 
 ```bash
 fastqc *trimmed.fastq.gz
-muitiqc -f .
+multiqc -f .
 ```
 
 ## Read Alignment
@@ -157,17 +157,19 @@ Aligning reads using STAR is a two-step process:
 1. Create a genome index 
 2. Map reads to the genome
 
-> A quick note on shared databases for human and other commonly used model organisms. The Orchestra cluster has a designated directory at `/groups/shared_databases/` in which there are files that can be accessed by any user. These files contain, but are not limited to, genome indices for various tools, reference sequences, tool specific data, and data from public databases, such as NCBI and PDB. So when using a tool and requires a reference of sorts, it is worth taking a quick look here because chances are it's already been taken care of for you. 
+> A quick note on shared databases for human and other commonly used model organisms. The Locus cluster has a designated directory at `/hpcdata/bio_data/` in which there are files that can be accessed by any user. These files contain, but are not limited to, genome indices for various tools, reference sequences, tool specific data, and data from public databases, such as NCBI. So when using a tool and requires a reference of sorts, it is worth taking a quick look here because chances are it's already been taken care of for you. 
+
+> If the desired reference is not already available on the bio_data directory, contact the locus team and request it.  Also, reference genomes can be downloaded from various sources (e.g. http://hgdownload.soe.ucsc.edu/downloads.html#human)
 
 ```bash
-$ ls -l /groups/shared_databases/igenome/
+$ ls -l /hpcdata/bio_data/iGenomes/
 ```
 
 #### Creating a genome index
 
-For this workshop we are using reads that originate from a small subsection of chromosome 1 (~300,000 reads) and so we are using only chr1 as the reference genome. Therefore, we cannot use any of the ready-made indices available in the `/groups/shared_databases/` folder.
+For this training we are using reads that originate from chr22 therefore we will create a genome index using only the fasta file for chr22 (copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/chr22.fa) and the annotations file copied from /hpcdata/bio_data/iGenomes/Homo_sapiens/UCSC/hg19/Annotation/Genes/genes.gtf
 
-For this workshop, we have already indexed the reference genome for you as this can take a while. We have provided the code below that you would use to index the genome for your future reference, but please **do not run the code below**. For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested a more accurate alignment of the reads. 
+For this workshop, we will create the index genome for this small chromosome hoping it won't take long but for a real whole genome analysis, you should make sure to use an existing index for the entire genome or create your own which will take a while.  For indexing the reference genome, a reference genome (FASTA) is required and an annotation file (GTF or GFF3) is suggested for a more accurate alignment of the reads. 
 
 The basic options to **generate genome indices** using STAR are as follows:
 
@@ -180,7 +182,12 @@ The basic options to **generate genome indices** using STAR are as follows:
 
 ```bash
 ** DO NOT RUN**
-STAR --runThreadN 6 --runMode genomeGenerate --genomeDir ./ --genomeFastaFiles chr1.fa --sjdbGTFfile chr1-hg19_genes.gtf --sjdbOverhang 99
+STAR --runThreadN 6 \
+--runMode genomeGenerate \
+--genomeDir chr22index \
+--genomeFastaFiles reference_data/chr22.fa \
+--sjdbGTFfile reference_data/genes.gtf \
+--sjdbOverhang 89
 ```
 
 The basic options for **mapping reads** to the genome using STAR are as follows:
@@ -204,7 +211,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 > If you like you can copy-paste it directly into your terminal. Alternatively, you can manually enter the command, but it is advisable to first type out the full command in a text editor (i.e. [Sublime Text](http://www.sublimetext.com/) or [Notepad++](https://notepad-plus-plus.org/)) on your local machine and then copy paste into the terminal. This will make it easier to catch typos and make appropriate changes. 
 
 ```bash
-$ STAR --runThreadN 3 \
+$ STAR --runThreadN 6 \
 --genomeDir /groups/hbctraining/intro_rnaseq_hpc/reference_STAR \
 --readFilesIn raw_data/Mov10_oe_1.subset.fq \
 --outFileNamePrefix results/STAR/Mov10_oe_1_ \
@@ -212,6 +219,16 @@ $ STAR --runThreadN 3 \
 --outSAMunmapped Within \
 --outSAMattributes NH HI NM MD AS
 ```
+
+STAR --genomeDir reference_data/chr22index \
+--runThreadN 6 \
+--readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz \
+--outFileNamePrefix results/HBR_Rep1 \
+--outSAMtype BAM SortedByCoordinate \
+--outSAMunmapped Within \
+--outSAMattributes Standard 
+
+
 ***
 
 **Exercise**

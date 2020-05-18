@@ -212,7 +212,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 
 ## Let's align trimmed reads to the indexed genome (chr22)
 
-``bash
+```bash
 STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
 --runThreadN 6 \
 --readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz \
@@ -226,8 +226,8 @@ STAR --genomeDir /hpcdata/scratch/rnaseq_lesson1/reference_data/chr22index \
 
 **Exercise**
 
-* How many files do you see in your output directory? 
-* Using the `less` command take a look at `Mov10_oe_1_Log.final.out` and answer the following questions:  
+* How many bam files do you see in your output directory? 
+* Using the `less` command take a look at `*.final.out` and answer the following questions:  
 	1. How many reads are uniquely mapped?
 	2. How many reads map to more than 10 locations on the genome?
 	3. How many reads are unmapped due to read length?
@@ -250,110 +250,6 @@ $ samtools view -h results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam | less
 ```
 Scroll through the SAM file and see how the fields correspond to what we expected.
 
-### Counting reads
-
-Once we have our reads aligned to the genome, the next step is to count how many reads have been mapped to each gene. The input files required for counting include the BAM file and an associated gene annotation file in GTF format. [htseq-count](http://htseq.readthedocs.io/en/release_0.9.1/count.html) and [featureCounts](http://bioinf.wehi.edu.au/featureCounts/) are 2 commonly used counting tools. Today, we will be using featureCounts to get the *gene* counts. We picked this tool because it is accurate, fast and is relatively easy to use. 
-
-`featureCounts` works by **taking the alignment coordinates for each read and cross-referencing that to the coordinates for *features* described in the GTF**. Most commonly a feature is considered to be a gene, which is the union of all exons (which is also a feature type) that make up that gene. *Please note that this tool is best used for counting reads associated with **genes**, and not for splice isoforms or transcripts, we will be covering that later today.* 
-
-`featureCounts` only includes and counts those reads that map to a single location (uniquely mapping) and follows the scheme in the figure below for assigning reads to a gene/exon. 
-
-<img src="../img/union.png" width="400">
-
-`featureCounts` can also take into account whether your data are **stranded** or not. If strandedness is specified, then in addition to considering the genomic coordinates it will also take the strand into account for counting. If your data are stranded always specify it.
-
-#### Setting up to run featureCounts
-
-Let's start by creating a directory for the output:
-
-```bash
-$ mkdir results/counts
-```
-`featureCounts` is not available as a module on Orchestra, but we have already added the path for it (`/opt/bcbio/local/bin`) to our `$PATH` variable last time. 
-
-``` bash
-$ which featureCounts  # should return /opt/bcbio/local/bin/featureCounts 
-```
-
-> ** If running the above command does not return `/opt/bcbio/ocal/bin/featureCounts`, run `export PATH=/opt/bcbio/centos/bin:$PATH` and try the `which` command again.**
-
-How do we use this tool, what is the command and what options/parameters are available to us?
-
-``` bash
-$ featureCounts
-```
-
-So, it looks like the usage is `featureCounts [options] -a <annotation_file> -o <output_file> input_file1 [input_file2] ... `, where `-a`, `-o` and input files are required. 
-
-It can also take multiple bam files as input. Since we have only run STAR on 1 FASTQ file, let's copy over the other bam files that we would need so we can generate the full count matrix.
-
-```bash
-cp /groups/hbctraining/intro_rnaseq_hpc/bam_STAR/*bam ~/unix_lesson/rnaseq/results/STAR/
-```
-
-We are going to use the following options:
-
-`-T 4 # specify 4 cores`
-
-`-s 2 # these data are "reverse"ly stranded`
-
-and the following are the values for the required parameters:
-
-`-a ~/unix_lesson/rnaseq/reference_data/chr1-hg19_genes.gtf # required option for specifying path to GTF`
-
-`-o ~/unix_lesson/rnaseq/results/counts/Mov10_featurecounts.txt # required option for specifying path to, and name of the text output (count matrix)`
-
-`~/unix_lesson/rnaseq/results/STAR/*bam # the list of all the bam files we want to collect count information for`
-
-#### Running featureCounts
-
-``` bash
-$ featureCounts -T 4 -s 2 \
-  -a ~/unix_lesson/rnaseq/reference_data/chr1-hg19_genes.gtf \
-  -o ~/unix_lesson/rnaseq/results/counts/Mov10_featurecounts.txt \
-  ~/unix_lesson/rnaseq/results/STAR/*bam
-```
-#### featureCounts output
-
-The output of this tool is 2 files, *a count matrix* and *a summary file* that tabulates how many the reads were "assigned" or counted and the reason they remained "unassigned". Let's take a look at the summary file:
-	
-``` bash
-$ less results/counts/Mov10_featurecounts.txt.summary
-```
-Now let's look at the count matrix:
-	
-``` bash
-$ less results/counts/Mov10_featurecounts.txt
-```
-The count matrix that we need to perform differential gene expression analysis needs to look something like this:
-
-<img src="../img/count_matrix.png" width="500">
-
-Since the featureCounts output has additional columns with information about genomic coordinates, gene length etc., we can use the `cut` command to select only those columns that you are interested in. 
-	
-``` bash
-$ cut -f1,7,8,9,10,11,12 results/counts/Mov10_featurecounts.txt > results/counts/Mov10_featurecounts.Rmatrix.txt
-```
-
-```bash
-less results/counts/Mov10_featurecounts.Rmatrix.txt
-```
-
-To ready this text file (count matrix) for the next step of differential gene expression analysis, you will need to clean it up further by removing the first header line, and modifying the column names (headers) to simpler, smaller sampleIDs.
-
-***
-
-> #### Note on counting PE data
-> 
-> For paired-end (PE) data, the bam file contains information about whether both read1 and read2 mapped and if they were at roughly the correct distance from each other, that is to say if they were "properly" paired. For most counting tools, only properly paired reads are considered by default, and each read pair is counted only once as a single "fragment". 
-> 
-> For counting PE fragments associated with genes, the input bam files need to be sorted by read name (i.e. alignment information about both read pairs in adjoining rows). The alignment tool might sort them for you, but watch out for how the sorting was done. If they are sorted by coordinates (like with STAR), you will need to use `samtools sort` to re-sort them by read name before using as input in featureCounts. If you do not sort you BAM file by read name before using as input, featureCounts assumes that almost all the reads are not properly paired.
-
-***
-
-### Next Steps: Performing DE analysis on the count matrix
-
-This text file with a matrix of raw counts can be used as input to tools like [DESeq2](http://bioconductor.org/packages/release/bioc/html/DESeq2.html), [EdgeR](http://bioconductor.org/packages/release/bioc/html/edgeR.html) and [limma-voom](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2014-15-2-r29). Running the DE analysis tools are outside the scope of this workshop since they require a working knowledge of R. We do have [additional materials](https://github.com/hbctraining/Intro-to-rnaseq-hpc/blob/master/lessons/DE_analysis.md) that you can go through for performing these analyses using the MOV10 dataset, and we might walk through them if time permits today. 
 
 ### Visual assessment of the alignment
 

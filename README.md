@@ -139,7 +139,7 @@ This sequential searching of only the unmapped portions of reads underlies the e
 
 **If extension does not give a good alignment**, then the poor quality or adapter sequence (or other contaminating sequence) will be soft clipped.
 
-![STAR_step4](../img/alignment_STAR_step4.png)
+![STAR_step4](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/img/alignment_STAR_step4.png)
 
 
 #### Clustering, stitching, and scoring
@@ -148,7 +148,7 @@ The separate seeds are stitched together to create a complete read by first clus
 
 Then the seeds are stitched together based on the best alignment for the read (scoring based on mismatches, indels, gaps, etc.). 
 
-![STAR_step5](../img/alignment_STAR_step5.png)
+![STAR_step5](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/img/alignment_STAR_step5.png)
 
 ### Running STAR
 

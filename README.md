@@ -9,6 +9,7 @@
 * Describe and implement the RNA-seq workflow from the pre-processing step to the alignment of reads to the reference genome 
 * Describe tools and methods within the RNA-seq workflow
 * Assessing input and output filetypes
+* Learn how to view alignment files on a genome browser
 
 ## Setting up to run the RNA-seq workflow
 
@@ -22,13 +23,14 @@ $ qrsh -pe threaded 6
 Copy the `rnaseq_lesson1` directory to your working directory:
 
 ```bash
+$ cd /hpcdata/{group}/{workingdir} 
 $ cp -r /hpcdata/scratch/rnaseq_lesson1 .
 ```
 
 Once you copy the directly, verify that you have a directory tree setup similar to that shown below. It is best practice to have all files you intend on using for your workflow present within the same directory.
 
 ```
-rnaseq/
+rnaseq_lesson1/
 	├── raw_data/
 	   └── UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq.gz
 	   └── UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq.gz
@@ -36,6 +38,7 @@ rnaseq/
 	   └── HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
 	   └── HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep2_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
 	   └── HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep3_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
+	   └── inputfastqID.txt
 	├── reference_data/
 	   └── chr1.fa
 	   └── chr1-hg19_genes.gtf
@@ -53,14 +56,27 @@ So let's get started by loading up some of the modules for tools we need for thi
 ```bash
  $ module load module load STAR/2.7.3a-goolf-1.7.20 
  $ module load module load samtools
- $ module load 
+ $ module load fastqc/0.11.8-Java-1.8.0_45
+ $ module load multiqc/1.7-Python-3.5.5
+ $ module laod cutadapt
 ```
+
+Let's  quickly inspect quality of input files using FastQC as learned in previous session
+```bash
+$ cd rnaseq_lesson1
+$ fastqc *fastq.gz
+$ multiqc .
+```
+
+
+
+
 Create an output directory for our alignment files:
 
 ```bash
 $ mkdir results/STAR
 ```
-In the automation script, we will eventually loop over all of our files and have the cluster work on the files in parallel. For now, we're going to work on just one to test and set up our workflow. To start we will use the first replicate in the Mov10 overexpression group, `Mov10_oe_1_subset.fq`.
+
 
 ## Read Trimming
 ## Quality Control (*Optional*) - Trimming 
@@ -81,8 +97,9 @@ If you need to perform trimming on your fastq data to remove unwanted sequences/
 Example of cutadapt usage:
 
 ```bash
-$ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz 
-$ cutadapt --front=CTCAAATTTATT --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1_trimmed.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz
+$ cutadapt -u 10 --minimum-length=25  -o HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq.gz -p  HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.fastq.gz HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.fastq.gz
+
+
 ```
 
 After trimming, cutadapt can remove any reads that are too short to ensure that you do not get spurious mapping of very short sequences to multiple locations on the genome. In addition to adapter trimming, cutadapt can trim off any low-quality bases too, but **please note that quality-based trimming is not considered best practice, since majority of the newer, recommended alignment tools can account for this.**

@@ -275,11 +275,10 @@ STAR --genomeDir reference_data/chr22index \
 	2. How many reads map to more than 10 locations on the genome?
 	3. How many reads are unmapped due to read length?
 
-### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate.  Use a loop as shown below for convenience.
+### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate and then visualize on a browser.  For alignment of many samples, use a loop as shown below for convenience.
+***DO NOT WORRY ABOUT RUNNING THE CODE BELOW DURING THIS LIVE TRAINING SESSION*** Instead after this class, try running the entire script that is available on the scripts directory.  For the purpose of this training, we will provide the results below for you to use in subsequent steps. 
 
 ```bash
-*** DO NOT WORRY ABOUT RUNNING, it won't finish on time for the class.  Don't worry, for the subsequent steps, we will provide you with the output bams ***
-
 cd raw_data
 file="inputIDs.txt"
 while read line
@@ -330,7 +329,7 @@ Scroll through the SAM file and see how the fields correspond to what we expecte
 
 
 ### Merge alignment
-**Exercise 3**
+**Exercise 3: Merge, Index and View files using IGV browser**
 
 ```bash
 

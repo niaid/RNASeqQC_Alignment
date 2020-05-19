@@ -22,7 +22,7 @@ To get started with this lesson, we will start an interactive session and ask fo
 
 ```bash
 $ ssh ai-submit1.niaid.nih.gov
-$ qrsh -pe threaded 6	
+$ qrsh -pe threaded 6 -l quick	
 ```
 
 Copy the `rnaseq_lesson1` directory to your working directory:

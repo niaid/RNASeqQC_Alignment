@@ -274,6 +274,14 @@ STAR --genomeDir reference_data/chr22index \
 	1. How many reads are uniquely mapped?
 	2. How many reads map to more than 10 locations on the genome?
 	3. How many reads are unmapped due to read length?
+	
+* Also, if desired use samtools flagstat to view percentage of mapped reads and other statistics
+```bash
+module load samtools
+samtools flagstat name_of_bamfile.bam
+modulle unload samtools
+```
+
 
 ### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate and then visualize on a browser.  For alignment of many samples, use a loop as shown below for convenience.
 ***DO NOT WORRY ABOUT RUNNING THE CODE BELOW DURING THIS LIVE TRAINING SESSION*** Instead after this class, try running the entire script that is available on the scripts directory.  For the purpose of this training, we will provide the results below for you to use in subsequent steps. 
@@ -324,11 +332,15 @@ cp UHR_Rep3*bam UHR_Rep3.bam
 ```
 
 ```bash
-$ samtools view -h results/HBR_Rep1.bam | less
+# optional inspection
+samtools view -h results/HBR_Rep1.bam | less
 ```
 Scroll through the SAM file and see how the fields correspond to what we expected.
 
-
+View statistics such as % aligned using samtools flagstat
+```bash
+samtools flagstat results/HBR_Rep1.bam
+```
 ### Merge alignment
 **Exercise 3: Merge, Index and View files using IGV browser**
 

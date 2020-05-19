@@ -57,18 +57,18 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 So let's get started by loading up some of the modules for tools we need for this section to perform QC, trim, align and inspect the alignment: 
 
 ```bash
- $ module load STAR/2.7.3a-goolf-1.7.20 
- $ module load samtools
- $ module load fastqc/0.11.8-Java-1.8.0_45
- $ module load multiqc/1.7-Python-3.5.5
- $ module load cutadapt/2.3-foss-2016b-Python-3.7.3
+module load STAR/2.7.3a-goolf-1.7.20 
+module load samtools
+module load fastqc/0.11.8-Java-1.8.0_45
+module load multiqc/1.7-Python-3.5.5
+module load cutadapt/2.3-foss-2016b-Python-3.7.3
 ```
 
 Let's  quickly inspect the quality of input files using FastQC as learned in previous session
 ```bash
-$ cd raw_data
-$ fastqc *fastq
-$ multiqc .
+cd raw_data
+fastqc *fastq
+multiqc .
 ```
 
 ## Read Trimming

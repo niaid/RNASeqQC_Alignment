@@ -257,7 +257,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 # do HBR_Rep1
 STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
---readFilesCommand raw_data/trimmedreads/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
+--readFilesCommand trimmedreads/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq trimmedreads/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
 --outFileNamePrefix results/HBR_Rep1_test \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
@@ -266,7 +266,7 @@ STAR --genomeDir reference_data/chr22index \
 # or UHR_Rep3
 STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
---readFilesCommand raw_data/trimmedreads/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
+--readFilesCommand trimmedreads/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.trimmed.fastq trimmedreads/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
 --outFileNamePrefix results/UHR_Rep3_test \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \

@@ -55,21 +55,31 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 <img src="https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/RNAseqWorkflow.png" width="400">
 
 
-So let's get started by loading up some of the modules for tools we need for this section to perform QC, trim, align and inspect the alignment: 
+So let's get started by listing the modules neeed for tools we will use to perform QC, trim, align and inspect the alignment.  We will load them as we need them, then unload
 
 ```bash
-module load STAR/2.7.3a-goolf-1.7.20 
-module load samtools
-module load fastqc/0.11.8-Java-1.8.0_45
-module load multiqc/1.7-Python-3.5.5
-module load cutadapt/2.3-foss-2016b-Python-3.7.3
+# Which modules to use?  Load and unload as needed
+
+# module load STAR/2.7.3a-goolf-1.7.20 
+# module load samtools
+# module load fastqc/0.11.8-Java-1.8.0_45
+# module load multiqc/1.7-Python-3.5.5
+# module load cutadapt/2.3-foss-2016b-Python-3.7.3
+# module load picard/2.17.6
+# module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 ```
 
 Let's  quickly inspect the quality of input files using FastQC as learned in previous session
 ```bash
+module load fastqc/0.11.8-Java-1.8.0_45
+module load multiqc/1.7-Python-3.5.5
+
 cd raw_data
 fastqc *fastq
 multiqc .
+
+module unload fastqc/0.11.8-Java-1.8.0_45
+module unload multiqc/1.7-Python-3.5.5
 ```
 
 ## Read Trimming
@@ -93,6 +103,7 @@ If you need to perform trimming on your fastq data to remove unwanted sequences/
 * For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ ls *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
 
 ```bash
+module load cutadapt/2.3-foss-2016b-Python-3.7.3
 mkdir trimmedreads
 
 file="inputIDs.txt"
@@ -101,6 +112,7 @@ while read line
     cat $line | cutadapt -u 10 -U 10 --minimum-length=25 -o trimmedreads/${line}.read1.trimmed.fastq -p trimmedreads/${line}.read2.trimmed.fastq ${line}_Build37-ErccTranscripts-chr22.read1.fastq ${line}_Build37-ErccTranscripts-chr22.read2.fastq
     echo "$line"
 done <"$file"
+module unload cutadapt/2.3-foss-2016b-Python-3.7.3
 ```
 
 After trimming, cutadapt can remove any reads that are too short to ensure that you do not get spurious mapping of very short sequences to multiple locations on the genome. In addition to the common adapter trimming step, cutadapt can trim off any low-quality bases too, but **please note that quality-based trimming is not considered best practice, since majority of the newer, recommended alignment tools can account for this.**
@@ -109,9 +121,15 @@ After trimming, cutadapt can remove any reads that are too short to ensure that 
 In order to verify that cutadapt did a good job trimming, rerun **fastqc** and **multiqc**
 
 ```bash
+module load fastqc/0.11.8-Java-1.8.0_45
+module load multiqc/1.7-Python-3.5.5
+
 cd trimmedreads
 fastqc *trimmed.fastq
 multiqc -f .
+
+module unload fastqc/0.11.8-Java-1.8.0_45
+module unload multiqc/1.7-Python-3.5.5
 ```
 
 ## Read Alignment
@@ -188,6 +206,8 @@ The basic options to **generate genome indices** using STAR are as follows:
 * `--sjdbOverhang`: readlength -1
 
 ```bash
+module load STAR/2.7.3a-goolf-1.7.20 
+
 cd ../../ # you should now be in the directory `rnaseq_lesson1`
 STAR --runThreadN 6 \
 --runMode genomeGenerate \
@@ -273,6 +293,8 @@ while read line
     --outSAMattributes Standard \
     --outFileNamePrefix ../results/${line}_
 done <"$file"
+
+module unload STAR/2.7.3a-goolf-1.7.20 
 ```
 
 ### Alignment Outputs (SAM/BAM)
@@ -311,6 +333,7 @@ Scroll through the SAM file and see how the fields correspond to what we expecte
 **Exercise 3**
 
 ```bash
+
 # If you have not yet aligned all 6 samples, copy the directory rnaseq_bams_lesson1 to the working directory
 cp -r /hpcdata/scratch/rnaseq_bams_lesson1 .
 
@@ -319,13 +342,19 @@ module load picard/2.17.6
 cd rnaseq_bams_lesson1
 java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=UHR.bam INPUT=UHR_Rep1.bam INPUT=UHR_Rep2.bam INPUT=UHR_Rep3.bam
 java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=HBR.bam INPUT=HBR_Rep1.bam INPUT=HBR_Rep2.bam INPUT=HBR_Rep3.bam
+
+module unload picard/2.17.6
 ```
 
 ### Index bam files
 ```bash
+module load samtools
+
 # create the index
 samtools index UHR.bam
 samtools index HBR.bam
+
+module unload samtools
 ```
 ### Load bam files to the IGV browswer
 

@@ -1,5 +1,5 @@
 # RNASeq QC and Alignment
-# CREATED: 05/18/2020 
+#### CREATED: 05/18/2020 
 * Introductory Practical Training
 * The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 

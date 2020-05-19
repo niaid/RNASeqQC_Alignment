@@ -356,6 +356,9 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 * Explore the read alignment in the following genes: EIF3L, NDUFA6, and RBX1
 * Also, noticed that SULT4A1 and GTSE1 are differentially expressed. Are they up-regulated or down-regulated in the brain (HBR) compared to cancer cell lines (UHR)?
 
+* The browser should look like this image
+![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
+
 ***
 **Optional Exercise for obataining counts from the alignment files**
 ```bash

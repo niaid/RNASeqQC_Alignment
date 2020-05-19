@@ -384,9 +384,12 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 * The browser should look like this image
 ![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
 
+***
 
 #### Optional steps for obataining counts from the alignment files
 **Exercise 4: use HTSeq for generating count table
+* Run htseq-count on alignments instead to produce raw counts instead of FPKM/TPM values for differential expression analysis. Refer to the HTSeq documentation for a more detailed explanation:http://www-huber.embl.de/users/anders/HTSeq/doc/count.html
+
 * Below are the steps for generating a table with counts for each gene per sample.  After the count table, feel free to try a differential expression workflow as described [here](https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression). 
 ```bash
 module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
@@ -399,7 +402,11 @@ htseq-count --format bam --order pos --mode intersection-strict --stranded rever
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep1.bam ../reference_data/genes.gtf > HBR_Rep1_gene.tsv
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep2.bam ../reference_data/genes.gtf > HBR_Rep2_gene.tsv
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id HBR_Rep3.bam ../reference_data/genes.gtf > HBR_Rep3_gene.tsv
+```
 
+* Merge results files into a single matrix for use in edgeR. The following joins the results for each replicate together, adds a header, reformats the result as a tab delimited file, and shows you the first 10 lines of the resulting file :
+
+```bash
 join UHR_Rep1_gene.tsv UHR_Rep2_gene.tsv | join - UHR_Rep3_gene.tsv | join - HBR_Rep1_gene.tsv | join - HBR_Rep2_gene.tsv | join - HBR_Rep3_gene.tsv > gene_read_counts_table_all.tsv
 echo "GeneID UHR_Rep1 UHR_Rep2 UHR_Rep3 HBR_Rep1 HBR_Rep2 HBR_Rep3" > header.txt
 cat header.txt gene_read_counts_table_all.tsv | grep -v "__" | perl -ne 'chomp $_; $_ =~ s/\s+/\t/g; print "$_\n"' > gene_read_counts_table_all_final.tsv

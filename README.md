@@ -355,7 +355,9 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 * The browser should look like this image
 ![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
 
-## **Exercise 4: Optional steps for obataining counts from the alignment files**
+
+#### Optional steps for obataining counts from the alignment files
+**Exercise 4: use HTSeq for generating count table
 * Below are the steps for generating a table with counts for each gene per sample.  After the count table, feel free to try a differential expression workflow as described [here](https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression). 
 ```bash
 module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9

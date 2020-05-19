@@ -29,7 +29,7 @@ Copy the `rnaseq_lesson1` directory to your working directory:
 
 ```bash
 $ cd /hpcdata/{group}/{workingdir} 
-$ cp -r /hpcdata/scratch/rnaseq_lesson1 .
+$ cp -r /hpcdata/scratch/rnaseq_lesson1 .    # if on Helix/Biowulf - use $ cp -r /scratch/rnaseq_lesson1 .
 $ cd rnaseq_lesson1
 ```
 
@@ -350,7 +350,7 @@ samtools flagstat results/HBR_Rep1.bam
 ```bash
 
 # If you have not yet aligned all 6 samples, copy the directory rnaseq_bams_lesson1 to the working directory
-cp -r /hpcdata/scratch/rnaseq_bams_lesson1 .
+cp -r /hpcdata/scratch/rnaseq_bams_lesson1 .    # if on Biowulf/Helix, use cp -r /scratch/rnaseq_bams_lesson1 .
 
 module load picard/2.17.6
 

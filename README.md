@@ -399,7 +399,7 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 ***
 
 #### ***Challenge - Post Alignment QC***
-> For visualizing metrics such as insert size, run Picard tools and FastQC as described in the following link: 
+> For visualizing metrics such as insert size, run Picard tools and FastQC using the script [alignment_postQC.sh](https://github.com/niaid/RNASeqQC_Alignment/blob/master/alignment_postQC.sh) which is a short version of the example here:
 https://pmbio.org/module-03-align/0003/05/01/PostAlignment_QC/
 
 ***

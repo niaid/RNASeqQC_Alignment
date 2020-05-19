@@ -17,7 +17,7 @@
 * Assessing input and output filetypes
 * Learn how to view alignment files on a genome browser
 
-## Setting up to run the RNA-seq workflow
+## Setting up to run the RNA-seq working directory
 
 To get started with this lesson, we will start an interactive session and ask for 6 cores, by adding `pe threaded 6` to the qsub command:
 
@@ -87,7 +87,7 @@ module unload multiqc/1.7-Python-3.5.5
 ```
 
 ## Read Trimming
-## Quality Control (*Optional*) - Trimming 
+### Quality Control (*Optional*) - Trimming 
 
 We want to make sure that as many reads as possible map or align accurately to the genome. To ensure accuracy, only a small number of mismatches between the read sequence and the genome sequence are allowed, and any read with more than a few mismatches will be marked as being unaligned. 
 

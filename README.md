@@ -1,8 +1,8 @@
 # RNASeq QC and Alignment using NIAID Locus HPC
 #### CREATED: 05/18/2020 
 * Introductory Practical Training
-* The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
-* The adaptation for running this data analysis using the NIAID Locus cluster has been done by **Mariam Quiñones. 
+* The material shown below has been adapted from open access resources listed in the References section below.   We very much appreciate the effort of the various groups that made high quality course material publicly available.
+* The adaptation for running this data analysis workflow using the NIAID Locus cluster has been done by **Mariam Quiñones**. 
 
 ***
 

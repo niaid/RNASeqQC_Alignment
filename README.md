@@ -8,7 +8,10 @@
 
 ***For an introductory lesson on using the Locus HPC - see the following link created by Dr. Poorani Subramanian [Locus](https://github.com/niaid/NGS_Intro/blob/master/notes/locus.md)***
 
----
+***
+Navigation links
+* [Setting up the working directory](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#setting-up-to-run-the-rna-seq-working-directory)
+* [Trimming]( )
 
 ## Learning Objectives:
 

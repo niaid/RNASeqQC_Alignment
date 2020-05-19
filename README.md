@@ -307,7 +307,7 @@ These fields are described briefly below, but for more detailed information the 
 ![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam3.png)
 
 
-* The SAM flags are explained in more details [picard_explain-flags](https://broadinstitute.github.io/picard/explain-flags.html)
+* The SAM flags are explained in more details here: [picard_explain-flags](https://broadinstitute.github.io/picard/explain-flags.html)
 
 * We are now getting ready to view the alignment files (BAM) in the IGV browser.  Before doing so, we should rename files, merge and index
 
@@ -385,6 +385,10 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 ![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
 
 ***
+
+#### Challenge - Post Alignment QC
+> For visualizing metrics such as insert size, run Picard tools and FastQC as described in the following link: 
+https://pmbio.org/module-03-align/0003/05/01/PostAlignment_QC/
 
 #### Optional steps for obataining counts from the alignment files
 **Exercise 4: use HTSeq for generating count table

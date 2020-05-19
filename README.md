@@ -5,7 +5,7 @@
 * The adaptation for running this data analysis using the NIAID Locus cluster has been done by **Mariam Quiñones. 
 
 ***
-**For an introductory lesson on using the Locus HPC - see the following link created by Dr. Poorani Subramanian [Locus](https://github.com/niaid/NGS_Intro/blob/master/notes/locus.md) 
+**For an introductory lesson on using the Locus HPC - see the following link created by Dr. Poorani Subramanian [Locus](https://github.com/niaid/NGS_Intro/blob/master/notes/locus.md) **
 
 ---
 

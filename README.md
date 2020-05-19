@@ -188,7 +188,7 @@ The basic options to **generate genome indices** using STAR are as follows:
 * `--sjdbOverhang`: readlength -1
 
 ```bash
-cd ../../. # you should now be in the directory `rnaseq_lesson1`
+cd ../../ # you should now be in the directory `rnaseq_lesson1`
 STAR --runThreadN 6 \
 --runMode genomeGenerate \
 --genomeDir reference_data/chr22index \
@@ -234,7 +234,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 # do HBR_Rep1
 STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
---readFilesCommand zcat raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
+--readFilesCommand raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/HBR_Rep1_ERCC-Mix2_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
 --outFileNamePrefix results/HBR_Rep1_test \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
@@ -243,7 +243,7 @@ STAR --genomeDir reference_data/chr22index \
 # or UHR_Rep3
 STAR --genomeDir reference_data/chr22index \
 --runThreadN 6 \
---readFilesCommand zcat raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
+--readFilesCommand raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.trimmed.fastq raw_data/UHR_Rep3_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.trimmed.fastq \
 --outFileNamePrefix results/UHR_Rep3_test \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
@@ -255,7 +255,7 @@ STAR --genomeDir reference_data/chr22index \
 	2. How many reads map to more than 10 locations on the genome?
 	3. How many reads are unmapped due to read length?
 
-### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate.  Use a loop as shown below
+### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate.  Use a loop as shown below for convenience.
 
 ```bash
 *** DO NOT WORRY ABOUT RUNNING, it won't finish on time for the class.  Don't worry, for the subsequent steps, we will provide you with the output bams ***

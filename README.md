@@ -11,7 +11,7 @@
 ***
 Navigation links
 * [Setting up the working directory](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#setting-up-to-run-the-rna-seq-working-directory)
-* [Trimming]( )
+* [PreProcessing - Trimming](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#read-trimming)
 
 ## Learning Objectives:
 

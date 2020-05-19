@@ -1,6 +1,6 @@
 # RNASeq QC and Alignment
 # CREATED: 05/18/2020 
-* Introductory practical training
+* Introductory Practical Training
 * The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 
 ---
@@ -64,7 +64,7 @@ So let's get started by loading up some of the modules for tools we need for thi
  $ module load cutadapt/2.3-foss-2016b-Python-3.7.3
 ```
 
-Let's  quickly inspect quality of input files using FastQC as learned in previous session
+Let's  quickly inspect the quality of input files using FastQC as learned in previous session
 ```bash
 $ cd raw_data
 $ fastqc *fastq
@@ -86,8 +86,9 @@ Therefore, to make sure that all the reads in the dataset have a chance to map/a
 * our data does not have an appreciable amount of leftover adapter sequences or other contaminating sequences based on FastQC.
 * the alignment tool we have picked (STAR) is able to account for low-quality bases at the ends of reads when matching them to the genome.
 
-If you need to perform trimming on your fastq data to remove unwanted sequences/bases, a recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html) but Btrim and Trimmomatic are also very good and fast.   A typical use of cutadapt is to remove adapter using a command line such as:  > $ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz  
+If you need to perform trimming on your fastq data to remove unwanted sequences/bases, a recommended tool is [cutadapt](http://cutadapt.readthedocs.io/en/stable/index.html) but Btrim and Trimmomatic are also very good and fast.   A typical use of cutadapt is to remove adapter using a command line such as: $ cutadapt --adapter=AGATCGGAAGAG --minimum-length=25  -o myfile_trimmed.fastq.gz myfile.fastq.gz  
 
+**Exercise 1**
 * For this session, we will use cutadapt to remove the first 10 bases of each read.  We will use a loop to trim all files at once.  For this loop, we had created a text file with part of the IDs called "inputfastqID.txt" using the command line $ ls *fastq.gz | sed 's/\.read[1-2].fastq.gz.*//g' | sort | uniq > inputfastqID.txt 
 
 ```bash
@@ -217,7 +218,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 > If you like you can copy-paste it directly into your terminal. Alternatively, you can manually enter the command, but it is advisable to first type out the full command in a text editor (i.e. [Sublime Text](http://www.sublimetext.com/) or [Notepad++](https://notepad-plus-plus.org/)) on your local machine and then copy paste into the terminal. This will make it easier to catch typos and make appropriate changes. 
 
 ## Let's align one pair of trimmed reads to the indexed genome (chr22)
-* ***Where do the input files come from?  
+* Where do the input files come from?  
 * See additional details: https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data .  Paired-end 101-mers generated on an Illumina HiSeq instrument.  UHR (Universal Human Reference), HBR (Human Brain Reference).  These datasets are highlighted on the tutorial https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression
 * UHR + ERCC Spike-In Mix1, Replicate 1
 * UHR + ERCC Spike-In Mix1, Replicate 2
@@ -226,12 +227,7 @@ Now let's put it all together! The full STAR alignment command is provided below
 * HBR + ERCC Spike-In Mix2, Replicate 2
 * HBR + ERCC Spike-In Mix2, Replicate 3
 
-* How many reads are there in the first library? Decompress file on the fly with 'zcat', pipe into 'grep', search for the read name prefix and pipe into 'wc' to do a word count ('-l' gives lines)
-
-```bash
-zcat raw_data/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq.gz | grep -P "^\@HWI" | wc -l
-```
-
+**Exercise 2**
 * Align one pair to chr22 index
 ```bash
 # do HBR_Rep1
@@ -253,21 +249,16 @@ STAR --genomeDir reference_data/chr22index \
 --outSAMattributes Standard
 ```
 
-***
-
-**Exercise**
-
-* How many bam files do you see in your output directory? 
 * Using the `less` command take a look at `*.final.out` and answer the following questions:  
 	1. How many reads are uniquely mapped?
 	2. How many reads map to more than 10 locations on the genome?
 	3. How many reads are unmapped due to read length?
-***
 
-### Please know that on a real analysis, you should align all samples.  Merge technical replicates as appropriate.  Use a loop. 
+### Please know that on a real analysis, you should align all samples.  If needed, merge technical replicates as appropriate.  Use a loop as shown below
 
 ```bash
-*** DO NOT RUN, Instead use the output provided to continue to the next step ***
+*** DO NOT WORRY ABOUT RUNNING, it won't finish on time for the class.  Don't worry, for the subsequent steps, we will provide you with the output bams ***
+
 cd raw_data
 file="inputIDs.txt"
 while read line
@@ -293,9 +284,10 @@ These fields are described briefly below, but for more detailed information the 
 
 ![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam3.png)
 
-Let's take a quick look at our alignment. To do so we first convert our BAM file into SAM format using samtools and then pipe it to the `less` command. This allows us to look at the contents without having to write it to file (since we don't need a SAM file for downstream analyses).
 
-### Rename files
+* Let's take a quick look at our alignment files (BAM) in the IGV browser.  Before doing so, we should rename files, merge and index
+
+* Rename files
 * If you were not able to align the reads during the class, jump to the **Merge alignment** section where you will find a copy of the aligned bam files.  On the other hand, if you have bam files resulting from the alignment exercise using STAR, proceed to rename the files. 
 
 ```bash
@@ -315,6 +307,8 @@ Scroll through the SAM file and see how the fields correspond to what we expecte
 
 
 ### Merge alignment
+**Exercise 3**
+
 ```bash
 # If you have not yet aligned all 6 samples, copy the directory rnaseq_bams_lesson1 to the working directory
 cp -r /hpcdata/scratch/rnaseq_bams_lesson1 .
@@ -326,12 +320,13 @@ java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=UHR.bam INPUT=U
 java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=HBR.bam INPUT=HBR_Rep1.bam INPUT=HBR_Rep2.bam INPUT=HBR_Rep3.bam
 ```
 
-### Visual assessment of the alignment
+### Index bam files
 ```bash
 # create the index
 samtools index UHR.bam
 samtools index HBR.bam
 ```
+### Load bam files to the IGV browswer
 
 Use _**locus mounted drive** to upload files to IGV:
 smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
@@ -359,8 +354,8 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 * The browser should look like this image
 ![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
 
-## Optional Exercise for obataining counts from the alignment files**
-* Below are the steps for generating a table with counts for each gene per sample.  After the count table, feel free to try a differential expression workflow as described [here](https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression)
+## **Exercise 4: Optional steps for obataining counts from the alignment files**
+* Below are the steps for generating a table with counts for each gene per sample.  After the count table, feel free to try a differential expression workflow as described [here](https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression). 
 ```bash
 module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 
@@ -382,22 +377,16 @@ head gene_read_counts_table_all_final.tsv
 
 
 ## References
-1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/) 
-2. https://www.epigenesys.eu/images/stories/protocols/pdf/20150303161357_p67.pdf
-3. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4631051/
-4. Follow https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data
+1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/).  Alignment step - https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html and Introductory slides - https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lectures/rna-seq_design.pdf
+2. Description on QC errors - https://www.epigenesys.eu/images/stories/protocols/pdf/20150303161357_p67.pdf
+3. STAR publication: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4631051/ and Manual https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
+4. RNAseq tutorial: https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data and https://rnabio.org/
 5. Malachi Griffith*, Jason R. Walker, Nicholas C. Spies, Benjamin J. Ainscough, Obi L. Griffith*. 2015. Informatics for RNA-seq: A web resource for analysis on the cloud. PLoS Comp Biol. 11(8):e1004393
-6. https://rnabio.org/
-7. STAR alignment https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html
-8. STAR MANUAL https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
-9. Harvard Chan Bioinformatics Core - https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lectures/rna-seq_design.pdf
-10. Differential expression - https://github.com/griffithlab/rnaseq_tutorial/wiki/Expression
-11. QC after alignment - http://rseqc.sourceforge.net/ and example: https://github.com/griffithlab/rnaseq_tutorial/wiki/PostAlignment-QC
-12. HTSEq https://htseq.readthedocs.io/en/release_0.9.1/count.html
+6. QC after alignment - http://rseqc.sourceforge.net/ and example: https://github.com/griffithlab/rnaseq_tutorial/wiki/PostAlignment-QC
+7. HTSEq https://htseq.readthedocs.io/en/release_0.9.1/count.html
 
 
 ***
-*This lesson has been developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
-
-* *The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
+*This lesson shared at https://github.com/hbctraining/ was developed by members of the teaching team at the [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/). These are open access materials distributed under the terms of the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.*
+*In addition, the materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
 All Data Carpentry instructional material is made available under the [Creative Commons Attribution license](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).*

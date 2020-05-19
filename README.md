@@ -1,4 +1,4 @@
-# RNASeq QC and Alignment
+# RNASeq QC and Alignment using NIAID Locus HPC
 #### CREATED: 05/18/2020 
 * Introductory Practical Training
 * The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.

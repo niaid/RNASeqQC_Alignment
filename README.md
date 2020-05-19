@@ -307,9 +307,8 @@ These fields are described briefly below, but for more detailed information the 
 ![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam3.png)
 
 
-* Let's take a quick look at our alignment files (BAM) in the IGV browser.  Before doing so, we should rename files, merge and index
+* We are now getting ready to view the alignment files (BAM) in the IGV browser.  Before doing so, we should rename files, merge and index
 
-* Rename files
 * If you were not able to align the reads during the class, jump to the **Merge alignment** section where you will find a copy of the aligned bam files.  On the other hand, if you have bam files resulting from the alignment exercise using STAR, proceed to rename the files. 
 
 ```bash

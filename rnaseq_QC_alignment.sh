@@ -126,7 +126,7 @@ cp UHR_Rep3*bam UHR_Rep3.bam
 
 module load picard/2.17.6
 
-cd rnaseq_bams_lesson1
+#cd rnaseq_bams_lesson1
 java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=UHR.bam INPUT=UHR_Rep1.bam INPUT=UHR_Rep2.bam INPUT=UHR_Rep3.bam
 java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=HBR.bam INPUT=HBR_Rep1.bam INPUT=HBR_Rep2.bam INPUT=HBR_Rep3.bam
 

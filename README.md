@@ -359,8 +359,8 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 * The browser should look like this image
 ![GTSE1](https://github.com/niaid/RNASeqQC_Alignment/blob/master/GTSE1.png)
 
-***
-**Optional Exercise for obataining counts from the alignment files**
+## Optional Exercise for obataining counts from the alignment files**
+* Below are the steps for generating a table with counts for each gene per sample.  After the count table, feel free to try a differential expression workflow as described [here](https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression)
 ```bash
 module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 
@@ -381,7 +381,7 @@ head gene_read_counts_table_all_final.tsv
 ```
 
 
-***
+## References
 1. "RNA-Seq workflow" (https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/blob/master/lessons/07_rnaseq_workflow.md) author: "Mary Piper, Meeta Mistry, Radhika Khetani,  Bob Freeman". date: "Tuesday, August 22, 2017". [Harvard Chan Bioinformatics Core (HBC)](http://bioinformatics.sph.harvard.edu/) 
 2. https://www.epigenesys.eu/images/stories/protocols/pdf/20150303161357_p67.pdf
 3. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4631051/

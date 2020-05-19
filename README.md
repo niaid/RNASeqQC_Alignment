@@ -4,6 +4,9 @@
 * The material shown below has been adapted from open access resources listed in the References section below.   We appreciate the various groups that made high quality course material publicly available.
 * The adaptation for running this data analysis using the NIAID Locus cluster has been done by **Mariam Quiñones. 
 
+***
+For an introductory lesson on using Locus - see the materials created by Poorani Subramanian [Locus](https://github.com/niaid/NGS_Intro/blob/master/notes/locus.md) 
+
 ---
 
 ## Learning Objectives:

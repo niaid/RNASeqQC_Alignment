@@ -386,10 +386,11 @@ smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 
 ***
 
-#### Challenge - Post Alignment QC
+#### ***Challenge - Post Alignment QC***
 > For visualizing metrics such as insert size, run Picard tools and FastQC as described in the following link: 
 https://pmbio.org/module-03-align/0003/05/01/PostAlignment_QC/
 
+***
 #### Optional steps for obataining counts from the alignment files
 **Exercise 4: use HTSeq for generating count table
 * Run htseq-count on alignments instead to produce raw counts instead of FPKM/TPM values for differential expression analysis. Refer to the HTSeq documentation for a more detailed explanation:http://www-huber.embl.de/users/anders/HTSeq/doc/count.html

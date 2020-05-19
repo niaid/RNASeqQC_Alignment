@@ -294,27 +294,46 @@ These fields are described briefly below, but for more detailed information the 
 
 Let's take a quick look at our alignment. To do so we first convert our BAM file into SAM format using samtools and then pipe it to the `less` command. This allows us to look at the contents without having to write it to file (since we don't need a SAM file for downstream analyses).
 
+### Rename files
+* If you were not able to align the reads during the class, jump to the **Merge alignment** section where you will find a copy of the aligned bam files.  On the other hand, if you have bam files resulting from the alignment exercise using STAR, proceed to rename the files. 
+
 ```bash
-$ samtools view -h results/HBR_Rep1Aligned.sortedByCoord.out.bam | less
+cd ../results
+cp HBR_Rep1*bam HBR_Rep1.bam
+cp HBR_Rep2*bam HBR_Rep2.bam
+cp HBR_Rep3*bam HBR_Rep3.bam
+cp UHR_Rep1*bam UHR_Rep1.bam
+cp UHR_Rep2*bam UHR_Rep2.bam
+cp UHR_Rep3*bam UHR_Rep3.bam
+```
+
+```bash
+$ samtools view -h results/HBR_Rep1.bam | less
 ```
 Scroll through the SAM file and see how the fields correspond to what we expected.
 
 
-### Merge alignment 
-picard
+### Merge alignment
+```bash
+# If you have not yet aligned all 6 samples, copy the directory rnaseq_bams_lesson1 to the working directory
+cp -r /hpcdata/scratch/rnaseq_bams_lesson1 .
 
+module load picard/2.17.6
 
+cd rnaseq_bams_lesson1
+java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=UHR.bam INPUT=UHR_Rep1.bam INPUT=UHR_Rep2.bam INPUT=UHR_Rep3.bam
+java -Xmx2g -jar ${EBROOTPICARD}/picard.jar MergeSamFiles OUTPUT=HBR.bam INPUT=HBR_Rep1.bam INPUT=HBR_Rep2.bam INPUT=HBR_Rep3.bam
+```
 
 ### Visual assessment of the alignment
-
-Index the BAM file for visualization with IGV:
-
 ```bash
-$ samtools index results/HBR_Rep1Aligned.sortedByCoord.out.bam
+# create the index
+samtools index UHR.bam
+samtools index HBR.bam
 ```
 
 Use _**locus mounted drive** to upload files to IGV:
-smb://locusfileserver.niaid.nih.gov/group/directory/
+smb://locusfileserver.niaid.nih.gov/{group}/{directory}/
 
 > **NOTE: You can also transfer files to your laptop using the command line**
 >
@@ -333,7 +352,7 @@ smb://locusfileserver.niaid.nih.gov/group/directory/
 **Note**: there is also an option to "Load Genomes from File..." under the "Genomes" pull-down menu - this is useful when working with non-model organisms.  Select chr22.
 * Load the .bam file using the **"Load from File..."** option under the **"File"** pull-down menu. *IGV requires the `.bai` file to be in the same location as corresponding `.bam` file that you want to load into IGV, but there is no other direct use for this index file.*
 
-* Look for the following genes: EIF3L, NDUFA6, and RBX1
+* Explore the read alignment in the following genes: EIF3L, NDUFA6, and RBX1
 * Also, noticed that SULT4A1 and GTSE1 are differentially expressed. Are they up-regulated or down-regulated in the brain (HBR) compared to cancer cell lines (UHR)?
 
 ***
@@ -341,17 +360,6 @@ smb://locusfileserver.niaid.nih.gov/group/directory/
 ```bash
 module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 
-cd results
-mkdir htseq_counts
-cd htseq_counts
-
-# rename files
-cp HBR_Rep1*bam HBR_Rep1.bam
-cp HBR_Rep2*bam HBR_Rep2.bam
-cp HBR_Rep3*bam HBR_Rep3.bam
-cp UHR_Rep1*bam UHR_Rep1.bam
-cp UHR_Rep2*bam UHR_Rep2.bam
-cp UHR_Rep3*bam UHR_Rep3.bam
 
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep1.bam ../reference_data/genes.gtf > UHR_Rep1_gene.tsv
 htseq-count --format bam --order pos --mode intersection-strict --stranded reverse --minaqual 1 --type exon --idattr gene_id UHR_Rep2.bam ../reference_data/genes.gtf > UHR_Rep2_gene.tsv

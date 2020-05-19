@@ -307,6 +307,8 @@ These fields are described briefly below, but for more detailed information the 
 ![SAM](https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/sam_bam3.png)
 
 
+* The SAM flags are explained in more details ![picard_explain-flags](https://broadinstitute.github.io/picard/explain-flags.html)
+
 * We are now getting ready to view the alignment files (BAM) in the IGV browser.  Before doing so, we should rename files, merge and index
 
 * If you were not able to align the reads during the class, jump to the **Merge alignment** section where you will find a copy of the aligned bam files.  On the other hand, if you have bam files resulting from the alignment exercise using STAR, proceed to rename the files. 

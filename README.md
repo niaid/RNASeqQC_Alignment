@@ -12,6 +12,10 @@
 Navigation links
 * [Setting up the working directory](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#setting-up-to-run-the-rna-seq-working-directory)
 * [PreProcessing - Trimming](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#read-trimming)
+* [STAR alignment](https://github.com/niaid/RNASeqQC_Alignment/blob/master/README.md#star-alignment-strategy)
+* [Post-alignment QC](https://github.com/niaid/RNASeqQC_Alignment#challenge---post-alignment-qc)
+* [View alignment in Browser](https://github.com/niaid/RNASeqQC_Alignment#load-bam-files-to-the-igv-browswer)
+* [Converting alignment to counts](https://github.com/niaid/RNASeqQC_Alignment#optional-steps-for-obataining-counts-from-the-alignment-files)
 
 ## Learning Objectives:
 

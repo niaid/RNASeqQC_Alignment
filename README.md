@@ -75,9 +75,8 @@ In the steps below, we will be using the following tools (modules on Locus) to p
 - module load cutadapt/2.3-foss-2016b-Python-3.7.3
 - module load picard/2.17.6
 - module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
-```
 
-Let's  quickly inspect the quality of input files using FastQC as learned in previous session
+## Let's  quickly inspect the quality of input files using FastQC
 ```bash
 module load fastqc/0.11.8-Java-1.8.0_45
 module load multiqc/1.7-Python-3.5.5
@@ -91,7 +90,7 @@ module unload multiqc/1.7-Python-3.5.5
 ```
 
 ## Read Trimming
-### Quality Control (*Optional*) - Trimming 
+### Quality Control (*Optional step on RNA-Seq workflow*) - Trimming 
 
 We want to make sure that as many reads as possible map or align accurately to the genome. To ensure accuracy, only a small number of mismatches between the read sequence and the genome sequence are allowed, and any read with more than a few mismatches will be marked as being unaligned. 
 
@@ -249,12 +248,12 @@ Now let's put it all together! The full STAR alignment command is provided below
 ## Let's align one pair of trimmed reads to the indexed genome (chr22)
 * Where do the input files come from?  
 * See additional details: https://github.com/griffithlab/rnaseq_tutorial/wiki/RNAseq-Data .  Paired-end 101-mers generated on an Illumina HiSeq instrument.  UHR (Universal Human Reference), HBR (Human Brain Reference).  These datasets are highlighted on the tutorial https://github.com/griffithlab/rnaseq_tutorial/wiki/Differential-Expression
-* UHR + ERCC Spike-In Mix1, Replicate 1
-* UHR + ERCC Spike-In Mix1, Replicate 2
-* UHR + ERCC Spike-In Mix1, Replicate 3
-* HBR + ERCC Spike-In Mix2, Replicate 1
-* HBR + ERCC Spike-In Mix2, Replicate 2
-* HBR + ERCC Spike-In Mix2, Replicate 3
+- UHR + ERCC Spike-In Mix1, Replicate 1
+- UHR + ERCC Spike-In Mix1, Replicate 2
+- UHR + ERCC Spike-In Mix1, Replicate 3
+- HBR + ERCC Spike-In Mix2, Replicate 1
+- HBR + ERCC Spike-In Mix2, Replicate 2
+- HBR + ERCC Spike-In Mix2, Replicate 3
 
 **Exercise 2**
 * Align one pair to chr22 index

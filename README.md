@@ -68,13 +68,13 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 
 In the steps below, we will be using the following tools (modules on Locus) to perform QC, trim, alignment and inspection of the alignment.  We will load the as we need them, then unload
 
-# module load STAR/2.7.3a-goolf-1.7.20 
-# module load samtools
-# module load fastqc/0.11.8-Java-1.8.0_45
-# module load multiqc/1.7-Python-3.5.5
-# module load cutadapt/2.3-foss-2016b-Python-3.7.3
-# module load picard/2.17.6
-# module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
+- module load STAR/2.7.3a-goolf-1.7.20 
+- module load samtools
+- module load fastqc/0.11.8-Java-1.8.0_45
+- module load multiqc/1.7-Python-3.5.5
+- module load cutadapt/2.3-foss-2016b-Python-3.7.3
+- module load picard/2.17.6
+- module load HTSeq/0.9.1-goolf-1.7.20-Python-2.7.9
 ```
 
 Let's  quickly inspect the quality of input files using FastQC as learned in previous session

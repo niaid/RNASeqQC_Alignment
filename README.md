@@ -26,7 +26,7 @@ Navigation links
 
 ## Setting up to run the RNA-seq working directory
 
-To get started with this lesson, we will start an interactive session and ask for 6 cores, by adding `pe threaded 6` to the qsub command:
+To get started with this lesson, you will start an interactive session and request 6 cores, by adding `pe threaded 6` to the qsub command.  If the request is not available, try to request a default interactive session by only entering `qrsh`
 
 ```bash
 $ ssh ai-submit1.niaid.nih.gov

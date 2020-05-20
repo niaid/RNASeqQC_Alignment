@@ -66,10 +66,7 @@ Below is a general overview of the steps involved in RNA-seq analysis.
 <img src="https://github.com/hbctraining/Intro-to-rnaseq-hpc-orchestra/raw/master/img/RNAseqWorkflow.png" width="400">
 
 
-So let's get started by listing the modules neeed for tools we will use to perform QC, trim, align and inspect the alignment.  We will load them as we need them, then unload
-
-```bash
-# Which modules to use?  Load and unload as needed
+In the steps below, we will be using the following tools (modules on Locus) to perform QC, trim, alignment and inspection of the alignment.  We will load the as we need them, then unload
 
 # module load STAR/2.7.3a-goolf-1.7.20 
 # module load samtools
